@@ -118,6 +118,7 @@ let g:airline_theme='sol'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
+set laststatus=2
 
 " CtrlP
 let g:ctrlp_custom_ignore = 'build_*\|build'
