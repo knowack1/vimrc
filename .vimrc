@@ -158,3 +158,6 @@ imap <C-K> <ESC>:pyf ~/.vim/clang-format.py<CR>i
 map <F6> :make<Enter>
 map <F7> :cn<Enter>
 map <F8> :cp<Enter>
+
+"syntax
+au BufNewFile,BufRead *.tsx set filetype=javascript
