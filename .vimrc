@@ -161,3 +161,9 @@ map <F8> :cp<Enter>
 
 "syntax
 au BufNewFile,BufRead *.tsx set filetype=javascript
+au BufNewFile,BufRead *.ts set filetype=javascript
+
+"color scheme
+syntax enable
+set background=dark
+colorscheme solarized
