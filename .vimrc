@@ -7,7 +7,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kergoth/vim-bitbake'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -19,9 +19,10 @@ Plugin 'honza/vim-snippets'
 Plugin 'lyuts/vim-rtags'
 "Plugin 'milkypostman/vim-togglelist'
 Plugin 'rhysd/vim-clang-format'
-Plugin 'rdnetto/YCM-Generator'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'rdnetto/YCM-Generator'
+"Plugin 'Valloric/YouCompleteMe'
 Bundle 'ervandew/supertab'
+Bundle 'tpope/vim-dispatch'
 
 "All of your Plugins must be added before the following line
 
@@ -58,8 +59,8 @@ endif
 
 " tabs, spaces, wrapping
 set tabstop=8
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set nowrap
 set textwidth=80
@@ -93,10 +94,8 @@ vnoremap <silent> <a-down> :m '>+1<cr>gv=gv
 vnoremap <silent> <a-up> :m '<-2<cr>gv=gv
 
 " shortcuts
-map <leader>s :w <Enter>
-map <leader>S :w !sudo tee % <Enter>
-"map > :tabn <Enter>
-"map < :tabp <Enter>
+map <leader>s :set spell spelllang=en_us <Enter>
+map <leader>S :set nospell <Enter>
 
 " NERD Tree
 noremap  <F2> :NERDTreeTabsToggle<Enter>
@@ -121,12 +120,10 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 set laststatus=2
 
 " CtrlP
-let g:ctrlp_custom_ignore = 'build_*\|build'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_user_command = ['.git', 'git ls-files --exclude-standard %s']
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
-let g:ctrlp_follow_symlinks = 1
-let g:ctrlp_use_cache = 0
-let g:ctrlp_max_files = 0
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_cmd = 'CtrlPMRU'
 
 " ultisnips
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -155,15 +152,20 @@ map <C-K> :pyf ~/.vim/clang-format.py<CR>
 imap <C-K> <ESC>:pyf ~/.vim/clang-format.py<CR>i
 
 "compilation
-map <F6> :make<Enter>
+"command Make is from dispatch plugin
+map <F6> :Make<Enter>
 map <F7> :cn<Enter>
 map <F8> :cp<Enter>
+
+set makeprg=vimbuild
 
 "syntax
 au BufNewFile,BufRead *.tsx set filetype=javascript
 au BufNewFile,BufRead *.ts set filetype=javascript
 
 "color scheme
-syntax enable
-set background=dark
-colorscheme solarized
+"colorscheme eclipse
+hi Search guibg=Yellow guifg=Black ctermbg=Yellow ctermfg=Black
+
+"remove withspaces
+map <leader>w :%s/\s\+$//e <Enter>

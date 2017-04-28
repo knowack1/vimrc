@@ -1,0 +1,80 @@
+diff --git a/UltiSnips/c.snippets b/UltiSnips/c.snippets
+index c989464..6565096 100644
+--- a/UltiSnips/c.snippets
++++ b/UltiSnips/c.snippets
+@@ -52,17 +52,28 @@ endsnippet
+ snippet once "Include header once only guard"
+ #ifndef ${1:`!p
+ if not snip.c:
+-	import random, string
+-	name = re.sub(r'[^A-Za-z0-9]+','_', snip.fn).upper()
+-	rand = ''.join(random.sample(string.ascii_letters+string.digits, 8))
+-	snip.rv = ('%s_%s' % (name,rand)).upper()
++	import random, string, os
++	from UltiSnips import _vim
++	from itertools import takewhile
++	pathname = _vim.eval("expand('%:p')")
++	splitted = pathname.split(os.sep)
++	dirs = ['api', 'src']
++	if any(dirname in splitted for dirname in dirs ):
++	    items_for_guard = reversed([i for i in takewhile(lambda d: not d in dirs, reversed(splitted))])
++	    guard = '__'.join(items_for_guard).replace('.', '_')
++	    guard = '__' + guard + '__'
++	    snip.rv = guard
++	else:
++	    name = re.sub(r'[^A-Za-z0-9]+','_', snip.fn).upper()
++	    rand = ''.join(random.sample(string.ascii_letters+string.digits, 8))
++	    snip.rv = ('%s_%s' % (name,rand)).upper()
+ else:
+ 	snip.rv = snip.c`}
+ #define $1
+ 
+ ${VISUAL}${0}
+ 
+-#endif /* end of include guard: $1 */
++#endif  // $1
+ endsnippet
+ 
+ snippet fprintf "fprintf ..."
+diff --git a/UltiSnips/cpp.snippets b/UltiSnips/cpp.snippets
+index f7c2bd8..2261267 100644
+--- a/UltiSnips/cpp.snippets
++++ b/UltiSnips/cpp.snippets
+@@ -25,10 +25,22 @@ private:
+ endsnippet
+ 
+ snippet ns "namespace .. (namespace)"
+-namespace${1/.+/ /m}${1:`!p snip.rv = snip.basename or "name"`}
++namespace${1/.+/ /m}${1:`!p
++from UltiSnips import _vim
++import os
++pathname = _vim.eval("expand('%:p')")
++_, d = os.path.split(os.path.dirname(pathname))
++snip.rv = d
++`}
+ {
+ 	${VISUAL}${0}
+-}${1/.+/ \/* /m}$1${1/.+/ *\/ /m}
++}  // namespace $1
++endsnippet
++
++snippet uns "unnamed namespace" !
++namespace {
++$0
++}  // namespace anonymous
+ endsnippet
+ 
+ snippet readfile "read file (readF)"
+diff --git a/snippets/cpp.snippets b/snippets/cpp.snippets
+index d06b3c9..6f5ccd2 100644
+--- a/snippets/cpp.snippets
++++ b/snippets/cpp.snippets
+@@ -96,7 +96,7 @@ snippet mfun
+ snippet ns
+ 	namespace ${1:`vim_snippets#Filename('', 'my')`} {
+ 		${0}
+-	} /* namespace $1 */
++	}  // namespace $1 aaa
+ ##
+ ## Input/Output
+ # std::cout
